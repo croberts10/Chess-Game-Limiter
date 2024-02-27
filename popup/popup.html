@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess Daily Game Limiter</title>
+  <link rel="stylesheet" href = "bulma.min.css" />
+</head>
+<body>
+
+  <div class="container m-3">
+    <h1 class="title">Daily Chess Limiter</h1>
+
+    <!-- Running/stopped buttons-->
+    <div class="field">
+      <label class="label">Status</label>
+      <span class = "tag is-success">Running</span>
+      <span class = "tag is-danger">Stopped</span>
+
+    </div>
+  </div>
+
+  <div class="container m-3">
+    <!-- Asks for username-->
+    <div class="field">
+        <label class="label">Username:</label>
+        <input type="text" id="username" placeholder="Enter Username">
+    </div>
+    <!-- Asks for game limit-->
+    <div class="field">
+      <label class="label">Game Limit:</label>
+      <input type="number" id="dailyLimit" min="0" value="0">
+    </div>
+  </div>
+
+  <div class="container m-3">
+    <button class = "button  is-success is-fullwidth">Save & start</button>
+  </div>
+
+  <div class="container m-3">
+    <button class = "button is-danger is-fullwidth">Stop</button>
+  </div>
+
+
+
+
+  
+</body>
+</html>
