@@ -8,16 +8,17 @@
 
   },
   "icons": {
-    "16": "img/chess-26-16.png",
-    "32": "img/chess-26-32.png",
-    "48": "img/chess-26-48.png",
-    "128": "img/chess-26-128.png"
+    "16": "img/chess-icon-16.png",
+    "32": "img/chess-icon-32.png",
+    "48": "img/chess-icon-48.png",
+    "128": "img/chess-icon-128.png"
   },
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "alarms"
   ]
 }

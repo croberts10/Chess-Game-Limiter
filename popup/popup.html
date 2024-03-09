@@ -14,8 +14,8 @@
     <!-- Running/stopped buttons-->
     <div class="field">
       <label class="label">Status</label>
-      <span class = "tag is-success">Running</span>
-      <span class = "tag is-danger">Stopped</span>
+      <span id = "runningSpan" class = "tag is-success">Running</span>
+      <span id = "stoppedSpan" class = "tag is-danger">Stopped</span>
 
     </div>
   </div>
@@ -25,25 +25,26 @@
     <div class="field">
         <label class="label">Username:</label>
         <input type="text" id="username" placeholder="Enter Username">
+        <p id="usernameError" class="help is-danger" class="help is-danger" style="display: none">Please enter a valid username.</p>
     </div>
     <!-- Asks for game limit-->
     <div class="field">
       <label class="label">Game Limit:</label>
       <input type="number" id="dailyLimit" min="0" value="0">
+      <p id="dailyLimitError" class="help is-danger" style="display: none">Please enter a valid number.</p>
     </div>
   </div>
 
   <div class="container m-3">
-    <button class = "button  is-success is-fullwidth">Save & start</button>
+    <button class = "button  is-success is-fullwidth" id = "startButton">Save & start</button>
   </div>
 
   <div class="container m-3">
-    <button class = "button is-danger is-fullwidth">Stop</button>
+    <button class = "button is-danger is-fullwidth" id = "stopButton">Stop</button>
   </div>
-
-
-
 
   
 </body>
+
+<script src = "popup.js"></script>
 </html>
