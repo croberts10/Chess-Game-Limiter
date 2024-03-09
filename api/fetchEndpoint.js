@@ -1,7 +1,6 @@
-export default function fetchGameEndTimes(username, year, month) {
+export default function fetchEndpoint(username, year, month) {
     const CHESS_ENDPOINT = `https://api.chess.com/pub/player/${username}/games/${year}/${month}`;
-
-    fetch(CHESS_ENDPOINT)
+    return fetch(CHESS_ENDPOINT)
     .then(response => response.json())
     .then(data => {
         if (data && data.games && Array.isArray(data.games)) {
@@ -15,13 +14,14 @@ export default function fetchGameEndTimes(username, year, month) {
                     return endTime.getTime() === currentDate.getTime(); // Check if the game's end time is today
                 })
                 .map(game => game.end_time);
-
-            console.log(endTimesToday); // Array containing the Unix timestamps of end times for games that are from today
+            console.log("Games played today: ", endTimesToday.length)
+            return endTimesToday;
         } else {
-            console.log("No games data found or invalid format.");
+            throw new Error("No games data found or invalid format.");
         }
     })
     .catch(error => {
-        console.log(error);
+        throw error;
     });
 }
+

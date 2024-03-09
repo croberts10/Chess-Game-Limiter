@@ -5,7 +5,6 @@
   "description": "Limits the number of games a user can play on Chess.com per day.",
   "action": {
     "default_popup": "popup/popup.html"
-
   },
   "icons": {
     "16": "img/chess-icon-16.png",
@@ -17,8 +16,20 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "permissions": [
+  "permissions": [ 
     "storage",
-    "alarms"
+    "alarms",
+    "tabs",
+    "activeTab",
+    "scripting",
+    "webRequest",
+    "webRequestAuthProvider",
+    "declarativeNetRequest"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["blocker.js"]
+    }
   ]
 }

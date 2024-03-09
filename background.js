@@ -1,7 +1,12 @@
-import fetchEndpoints from "./api/fetchEndpoint.js";
+import fetchEndpoint from "./api/fetchEndpoint.js";
+
 
 const ALARM_JOB_NAME = "CHESS_ALARM";
 let data = [];
+
+let isRunning = false;
+let dailyLimitExceeded = false;
+let isBlocked = false;
 
 chrome.runtime.onInstalled.addListener(details => {
     console.log("Extension installed or updated");
@@ -23,9 +28,9 @@ chrome.runtime.onMessage.addListener(data => {
 
 const handleOnStart = (prefs) => { 
     console.log("prefs received", prefs);
-    const { usernameId, yearId, monthId } = prefs;
-    fetchEndpoints(usernameId, yearId, monthId);
+    const { usernameId, yearId, monthId} = prefs;
     setRunningStatus(true);
+    fetchEndpoint(usernameId, yearId, monthId)
     createAlarm();
 }
 
@@ -53,10 +58,10 @@ const stopAlarm = () => {
 
 chrome.alarms.onAlarm.addListener(async () => {
     console.log("Alarm triggered");
-    const { usernameId, yearId, monthId } = await getStoredPrefs();
-    fetchEndpoints(usernameId, yearId, monthId); // Fetch data every minute
-});
-
+    const { usernameId, yearId, monthId,} = await getStoredPrefs();
+    fetchEndpoint(usernameId, yearId, monthId)
+    }
+);
 const getStoredPrefs = () => {
     return new Promise((resolve, reject) => {
         chrome.storage.local.get(['usernameId', 'yearId', 'monthId'], result => {
@@ -68,3 +73,4 @@ const getStoredPrefs = () => {
         });
     });
 }
+
