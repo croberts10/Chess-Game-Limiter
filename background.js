@@ -1,12 +1,8 @@
 import fetchEndpoint from "./api/fetchEndpoint.js";
 
-
 const ALARM_JOB_NAME = "CHESS_ALARM";
-let data = [];
-
 let isRunning = false;
 let dailyLimitExceeded = false;
-let isBlocked = false;
 
 chrome.runtime.onInstalled.addListener(details => {
     console.log("Extension installed or updated");
@@ -28,9 +24,18 @@ chrome.runtime.onMessage.addListener(data => {
 
 const handleOnStart = (prefs) => { 
     console.log("prefs received", prefs);
-    const { usernameId, yearId, monthId} = prefs;
+    const { usernameId, yearId, monthId, dailyLimitId } = prefs;
     setRunningStatus(true);
-    fetchEndpoint(usernameId, yearId, monthId)
+    fetchEndpoint(usernameId, yearId, monthId).then(endTimesToday => {
+        const gamesPlayedToday = endTimesToday.length;
+        if (gamesPlayedToday > dailyLimitId) {
+            // Daily limit exceeded, activate blocker
+            dailyLimitExceeded = true;
+            activateBlocker();
+        } else {
+            dailyLimitExceeded = false;
+        }
+    });
     createAlarm();
 }
 
@@ -58,19 +63,34 @@ const stopAlarm = () => {
 
 chrome.alarms.onAlarm.addListener(async () => {
     console.log("Alarm triggered");
-    const { usernameId, yearId, monthId,} = await getStoredPrefs();
-    fetchEndpoint(usernameId, yearId, monthId)
-    }
-);
+    const { usernameId, yearId, monthId, dailyLimitId } = await getStoredPrefs();
+    fetchEndpoint(usernameId, yearId, monthId).then(endTimesToday => {
+        const gamesPlayedToday = endTimesToday.length;
+        if (gamesPlayedToday > dailyLimitId) {
+            // Daily limit exceeded, activate blocker
+            dailyLimitExceeded = true;
+            activateBlocker();
+        } else {
+            dailyLimitExceeded = false;
+        }
+    });
+});
+
 const getStoredPrefs = () => {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.get(['usernameId', 'yearId', 'monthId'], result => {
+        chrome.storage.local.get(['usernameId', 'yearId', 'monthId', 'dailyLimitId'], result => {
             if (chrome.runtime.lastError) {
                 reject(chrome.runtime.lastError);
             } else {
                 resolve(result);
             }
         });
+    });
+}
+
+const activateBlocker = () => {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {blockChess: true});
     });
 }
 

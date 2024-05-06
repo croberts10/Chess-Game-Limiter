@@ -251,7 +251,7 @@ const generateSTYLES = () => {
      `;
   };
 
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener((message) => {
     if (message.blockChess) {
         // Activate blocker
         document.head.innerHTML = generateSTYLES();
