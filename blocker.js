@@ -251,7 +251,10 @@ const generateSTYLES = () => {
      `;
   };
 
-  if (window.location.hostname === "www.chess.com") {
-    document.head.innerHTML = generateSTYLES();
-    document.body.innerHTML = generateHTML("CHESS");
-  }
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.blockChess) {
+        // Activate blocker
+        document.head.innerHTML = generateSTYLES();
+        document.body.innerHTML = generateHTML("CHESS");
+    }
+});
